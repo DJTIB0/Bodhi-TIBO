@@ -329,46 +329,6 @@ body.scrolled .side-bg {
 }
 
 
-/* Ajoute une barre UNIQUEMENT sur le "0" du H1 (après Afro Flow) */
-.hero h1.robin-daurat-title {
-  position: relative;
-  display: inline-block;
-}
-
-/* Barre diagonale simulant Ø */
-.hero h1.robin-daurat-title::after {
-  content: "";
-  position: absolute;
-  right: 300px;      /* position sur le 0 */
-  top: 48%;
-  width: 50px;
-  height: 5px;
-  background: currentColor;
-  transform: rotate(-68deg);
-  transform-origin: center;
-  pointer-events: none;
-}
-
-/* Ø pour le tib0 du header (même méthode que le H1) */
-header .robin-daurat-title {
-  position: relative;
-  display: inline-block;
-}
-
-/* Barre diagonale simulant Ø dans le header */
-header .robin-daurat-title::after {
-  content: "";
-  position: absolute;
-  right: -2.5px;        /* ajuste pour la taille 26px */
-  top: 45%;
-  width: 15px;
-  height: 1.5px;
-  background: currentColor;
-  transform: rotate(-68deg);
-  transform-origin: center;
-  pointer-events: none;
-}
-
 /* Forcer Bodhi et tib0 à passer sous Afro Flow */
 .hero .badge {
   display: block;
@@ -495,27 +455,42 @@ header .robin-daurat-title::after {
   scroll-margin-top: 120px; /* hauteur du header */
 }
 
-url('image/robin.jpeg')
-src="image/tibo (1).jpg"
-url('fonts/Afro_House.ttf')
+
 
 /* Forcer AfroHouse sur le menu de navigation */
 nav a {
   font-family: 'AfroHouse', sans-serif;
 }
-.hero h1.robin-daurat-title::after {
+
+
+/* Ø FIXE, FIN ET RESPONSIVE */
+.o-slash {
+  position: relative;
+  display: inline-block;
+  line-height: 1;
+}
+
+.o-slash::after {
   content: "";
   position: absolute;
-
-  /* 🔥 FIX RESPONSIVE */
-  right: -0.15em;      /* au lieu de 300px */
   top: 50%;
-  transform: translateY(-50%) rotate(-68deg);
+  left: 50%;
 
-  width: 0.8em;
-  height: 0.08em;
+  /* BARRE FINE */
+  width: 0.55em;
+  height: 0.06em;
+
   background: currentColor;
+  transform: translate(-50%, -50%) rotate(-65deg);
   pointer-events: none;
+}
+
+/* Mobile : encore plus fin */
+@media (max-width: 768px) {
+  .o-slash::after {
+    width: 0.5em;
+    height: 0.05em;
+  }
 }
 
 
@@ -527,13 +502,13 @@ nav a {
     <div class="logo">
       <div class="logo-box">Disc-jockey</div>
       <div>
-        <div style="font-size:26px; font-weight:700;" class="robin-daurat-title">Bodhi x tib0</div>
+        <div style="font-size:26px; font-weight:700;" class="robin-daurat-title">Bodhi x tib<span class="o-slash">0</span></div>
         <div style="font-size:14px;">Afro House / Deep House / House · Live Sets · Good Vibes</div>
       </div>
     </div>
 
     <nav>
-      <a href="#">2Accueil</a>
+      <a href="#">Accueil</a>
       <a href="#playlist">Playlist</a>
       <a href="#events">Evenements</a>
       <a href="#contact">Contact</a>
@@ -545,7 +520,8 @@ nav a {
       <div class="badge">Afro Flow</div>
 
       <h1 class="robin-daurat-title">
-  Bodhi et tib0
+  Bodhi et tib<span class="o-slash">0</span>
+
 </h1>
 
       <h2>Afro House et Vibes</h2>
